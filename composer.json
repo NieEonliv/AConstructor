@@ -16,13 +16,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Nieeonliv\\Advertising\\": "src"
+            "Nieeonliv\\AConstructor\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Nieeonliv\\AConstructor\\Providers\\AdvertisingServiceProvider"
+                "Nieeonliv\\AConstructor\\Providers\\AConstructorServiceProvider"
             ]
         }
     }

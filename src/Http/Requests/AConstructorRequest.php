@@ -23,7 +23,8 @@ class AConstructorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'data' => 'array|required'
+            'data' => 'array',
+            'model' => 'required'
         ];
     }
 }

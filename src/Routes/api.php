@@ -5,7 +5,7 @@ use Nieeonliv\AConstructor\Enums\AConstructorScopeEnum;
 use Nieeonliv\AConstructor\Http\Controllers\AConstructorController;
 
 //
-Route::middleware('scopes:'.AConstructorScopeEnum::A_CONSTRUCTOR_ADMIN->value)->prefix('aconstructor')->group(function () {
+Route::middleware(['auth:admin''scopes:'.AConstructorScopeEnum::A_CONSTRUCTOR_ADMIN->value])->prefix('aconstructor')->group(function () {
     Route::controller(AConstructorController::class)->group(function () {
         Route::get('', 'index');
 

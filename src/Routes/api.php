@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Nieeonliv\AConstructor\Enums\AConstructorScopeEnum;
 use Nieeonliv\AConstructor\Http\Controllers\AConstructorController;
 
-Route::middleware(['auth:admin', 'scopes:' . AConstructorScopeEnum::A_CONSTRUCTOR_ADMIN->value])->prefix('aconstructor')->group(function () {
+Route::middleware(['auth:admin', 'scopes:' . AConstructorScopeEnum::A_CONSTRUCTOR_ADMIN->value])->prefix('aconstructor/api')->group(function () {
     Route::controller(AConstructorController::class)->group(function () {
         Route::get('list', 'index');
         Route::get('fillable', 'fillable');

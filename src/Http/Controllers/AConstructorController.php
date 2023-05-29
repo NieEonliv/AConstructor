@@ -54,8 +54,14 @@ class AConstructorController extends Controller
     {
         $data = $request->validated();
         $model = App::make("App\\Models\\${data['model']}");
+
+        $relationsFillable = [];
+
         if (isset($data['relations'][0])) {
-            $model = $model->with($request->validated()['relations']);
+            $model = $model->with($data['relations']);
+            foreach ($data['relations'] as $item) {
+                $relationsFillable[$item] = $model->first()->{$item}->getModel()->getFillable();
+            }
         }
         if (isset($data['sortKey'])) {
             if ($data['orderBy']) {
@@ -64,7 +70,10 @@ class AConstructorController extends Controller
                 $model = $model->orderBy($data['sortKey'], 'desc');
             }
         }
-        return response($model->paginate(15), 200);
+
+        $response = $model->paginate(15);
+        $response['relationsFillable'] = $relationsFillable;
+        return response($response, 200);
     }
 
     public function relationship(AConstructorRequest $request, RelationshipModelAction $action): Response

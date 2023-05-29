@@ -55,12 +55,16 @@ class AConstructorController extends Controller
         $data = $request->validated();
         $model = App::make("App\\Models\\${data['model']}");
 
+        $subModels = [];
         $relationsFillable = [];
 
         if (isset($data['relations'][0])) {
             $model = $model->with($data['relations']);
             foreach ($data['relations'] as $item) {
-                $relationsFillable[$item] = $model->first()->{$item}->getModel()->getFillable();
+                try {
+                    $subModels[$item] = str_replace('App\\Models\\','',$model->first()->{$item}->getModel()->getMorphClass());
+                    $relationsFillable[$item] = $model->first()->{$item}->getModel()->getFillable();
+                } catch (\Throwable $e) {}
             }
         }
         if (isset($data['sortKey'])) {
@@ -71,9 +75,11 @@ class AConstructorController extends Controller
             }
         }
 
-        $response = $model->paginate(15);
-        $response['relationsFillable'] = $relationsFillable;
-        return response($response, 200);
+        $data = [];
+        $data['paginate'] = $model->paginate(15);
+        $data['sub_fillable'] = $relationsFillable;
+        $data['sub_models'] = $subModels;
+        return response($data, 200);
     }
 
     public function relationship(AConstructorRequest $request, RelationshipModelAction $action): Response
